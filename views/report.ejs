@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safe to Travel?</title>
+  <link rel="icon" href="/images/transparent-black-border-map-marker-with-plane-flying-over-1710972155974.webp" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-green-100 min-h-screen font-sans p-4">
+
+  <header class="text-center py-6">
+    <h1 class="text-4xl font-extrabold text-blue-900">✈️ AI Travel Safety & Route Visualizer</h1>
+    <p class="text-gray-700 mt-2">Plan smarter with real-time weather, routes & AI advice</p>
+  </header>
+
+  <main class="max-w-4xl mx-auto bg-white shadow-2xl rounded-3xl p-6 border border-blue-100">
+    <!-- Shared Form -->
+    <form id="mainForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-6">
+      <input id="fromInput" type="text" placeholder="From (City)" required class="p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400" />
+      <input id="toInput" type="text" placeholder="To (City)" required class="p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400" />
+      <input id="travelDate" type="date" required class="p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-400" />
+    </form>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-center gap-4 mb-8">
+      <button id="checkSafetyBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-xl shadow">Check Travel Safety</button>
+      <button id="showRouteBtn" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-xl shadow">Show Route</button>
+    </div>
+
+    <!-- Weather Results -->
+    <div id="weatherResults" class="hidden animate-fade-in-up mb-8">
+      <div class="grid sm:grid-cols-2 gap-4 text-center">
+        <div id="fromWeather" class="bg-blue-50 rounded-xl p-4">
+          <h3 class="font-semibold text-blue-700">From: <span id="fromLocation"></span></h3>
+          <p id="fromDate" class="text-gray-500 text-sm"></p>
+          <img id="fromIcon" class="h-12 mx-auto my-2" />
+          <p id="fromTemp" class="text-2xl font-bold"></p>
+          <p id="fromCondition" class="text-blue-500"></p>
+        </div>
+        <div id="toWeather" class="bg-green-50 rounded-xl p-4">
+          <h3 class="font-semibold text-green-700">To: <span id="toLocation"></span></h3>
+          <p id="toDate" class="text-gray-500 text-sm"></p>
+          <img id="toIcon" class="h-12 mx-auto my-2" />
+          <p id="toTemp" class="text-2xl font-bold"></p>
+          <p id="toCondition" class="text-green-500"></p>
+        </div>
+      </div>
+      <div id="aiAdvice" class="mt-6 p-4 bg-gradient-to-r from-blue-100 to-green-100 rounded-xl text-gray-800 border-l-4 border-blue-400 shadow"></div>
+    </div>
+
+    <!-- Route Info -->
+    <div id="travelInfo" class="text-center mb-4 font-medium text-gray-700"></div>
+    <!-- <div id="instructions" class="text-sm text-gray-600 leading-6 mb-4"></div> -->
+    <div id="map" class="w-full h-[400px] rounded-xl shadow border"></div>
+  </main>
+
+  <script type="module">
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+    const WEATHER_API_KEY = "bf9e3f0992484e3c89751526250804";
+    const GEMINI_API_KEY = "AIzaSyAC0LZmrIibBm88z5inZnF1CZZbVA-RCDw";
+    const weatherURL = "https://api.weatherapi.com/v1/forecast.json";
+    const ai = new GoogleGenerativeAI(GEMINI_API_KEY);
+
+    document.getElementById("checkSafetyBtn").addEventListener("click", async () => {
+      const fromCity = document.getElementById("fromInput").value.trim();
+      const toCity = document.getElementById("toInput").value.trim();
+      const travelDate = document.getElementById("travelDate").value;
+
+      try {
+        const [fromData, toData] = await Promise.all([
+          fetch(`${weatherURL}?key=${WEATHER_API_KEY}&q=${fromCity}&dt=${travelDate}`).then(res => res.json()),
+          fetch(`${weatherURL}?key=${WEATHER_API_KEY}&q=${toCity}&dt=${travelDate}`).then(res => res.json())
+        ]);
+
+        const fromForecast = fromData.forecast.forecastday[0].day;
+        const toForecast = toData.forecast.forecastday[0].day;
+
+        document.getElementById("fromLocation").textContent = `${fromData.location.name}, ${fromData.location.country}`;
+        document.getElementById("fromTemp").textContent = `${fromForecast.avgtemp_c}°C`;
+        document.getElementById("fromCondition").textContent = fromForecast.condition.text;
+        document.getElementById("fromIcon").src = fromForecast.condition.icon;
+        document.getElementById("fromDate").textContent = travelDate;
+
+        document.getElementById("toLocation").textContent = `${toData.location.name}, ${toData.location.country}`;
+        document.getElementById("toTemp").textContent = `${toForecast.avgtemp_c}°C`;
+        document.getElementById("toCondition").textContent = toForecast.condition.text;
+        document.getElementById("toIcon").src = toForecast.condition.icon;
+        document.getElementById("toDate").textContent = travelDate;
+
+        document.getElementById("weatherResults").classList.remove("hidden");
+        document.getElementById("aiAdvice").innerHTML = "⏳ Generating AI advice...";
+
+        const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const prompt = `
+  You are a travel safety assistant.
+  I am traveling from ${fromCity} to ${toCity} on ${travelDate}.
+  The weather in ${fromCity} on ${travelDate} is ${fromForecast.avgtemp_c}°C, ${fromForecast.condition.text}, and in ${toCity}, it is ${toForecast.avgtemp_c}°C, ${toForecast.condition.text}.
+  Consider the entire route from ${fromCity} to ${toCity}, including weather, traffic, and any road conditions along the way.
+  Is it safe to travel on this date between these cities? Please provide a short recommendation.
+`;
+
+const result = await model.generateContent(prompt);
+const response = await result.response;
+const advisoryText = await response.text();
+
+// Manually define keywords to split for better bullet logic
+const points = advisoryText
+  .split(/(?<=\.)(?=\s[A-Z])/g) // Split sentences, preserve punctuation
+  .map(sentence => sentence.trim())
+  .filter(Boolean) // Remove empty
+  .map(sentence => `<li class="mb-2">✅ ${sentence}</li>`)
+  .join('');
+
+document.getElementById("aiAdvice").innerHTML = `
+  <div class="mt-6 p-6 bg-gradient-to-r from-yellow-100 to-orange-200 rounded-xl shadow-xl border-l-4 border-orange-500">
+    <h3 class="text-2xl font-bold text-orange-900 mb-4">🚗 Travel Safety Advisory</h3>
+    <ul class="list-disc list-inside text-gray-800 text-lg leading-relaxed">
+      ${points}
+    </ul>
+  </div>
+`;
+
+
+      } catch (err) {
+        alert("Error fetching travel safety info.");
+        console.error(err);
+      }
+    });
+  </script>
+
+  <script>
+    const apiKey = "5b3ce3597851110001cf6248989a9e1b944c41e094d86f81f73f49d2";
+    const map = L.map("map").setView([20.5937, 78.9629], 5);
+    let routeLayer;
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
+
+    document.getElementById("showRouteBtn").addEventListener("click", async () => {
+      const source = document.getElementById("fromInput").value.trim();
+      const destination = document.getElementById("toInput").value.trim();
+
+      const getCoordinates = async (place) => {
+        const res = await fetch(`https://api.openrouteservice.org/geocode/search?api_key=${apiKey}&text=${encodeURIComponent(place)}`);
+        const data = await res.json();
+        if (!data.features.length) throw new Error(`Location not found: ${place}`);
+        return data.features[0].geometry.coordinates.reverse();
+      };
+
+      try {
+        const [srcCoords, dstCoords] = await Promise.all([
+          getCoordinates(source),
+          getCoordinates(destination),
+        ]);
+
+        map.setView(srcCoords, 7);
+
+        const routeRes = await fetch("https://api.openrouteservice.org/v2/directions/driving-car/geojson", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: apiKey,
+          },
+          body: JSON.stringify({
+            coordinates: [
+              [srcCoords[1], srcCoords[0]],
+              [dstCoords[1], dstCoords[0]],
+            ],
+          }),
+        });
+
+        const routeData = await routeRes.json();
+
+        if (routeLayer) map.removeLayer(routeLayer);
+        routeLayer = L.geoJSON(routeData, {
+          style: { color: "#ff5e00", weight: 5 },
+        }).addTo(map);
+
+        L.marker(srcCoords).addTo(map).bindPopup("Source: " + source).openPopup();
+        L.marker(dstCoords).addTo(map).bindPopup("Destination: " + destination);
+
+        const travelTime = routeData.features[0].properties.segments[0].duration / 60;
+        const travelDistance = routeData.features[0].properties.segments[0].distance / 1000;
+
+        document.getElementById("travelInfo").innerHTML = `
+  <div class="bg-white p-5 rounded-xl shadow-lg border border-green-200">
+    <h3 class="text-2xl font-semibold text-green-700 mb-4">Travel Information</h3>
+    <p class="text-lg text-gray-800">
+      <span class="font-bold">Estimated Travel Time:</span> ${travelTime.toFixed(2)} minutes
+    </p>
+    <p class="text-lg text-gray-800">
+      <span class="font-bold">Estimated Distance:</span> ${travelDistance.toFixed(2)} km
+    </p>
+  </div>
+`;
+
+
+        let instructions = '';
+        routeData.features[0].properties.segments[0].steps.forEach((step, index) => {
+          instructions += `Step ${index + 1}: ${step.instruction}<br>`;
+        });
+        // document.getElementById("instructions").innerHTML = instructions;
+
+      } catch (err) {
+        alert("Error loading route data.");
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - WanderMind</title>
+    <link rel="icon" href="/images/transparent-black-border-map-marker-with-plane-flying-over-1710972155974.webp" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style>
+        /* Custom Background Animation */
+        body {
+            background: linear-gradient(-45deg, #20a9cf, #23354c, #4f749a, #01233a);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen relative">
+    
+    <!-- Floating Light Effect -->
+    <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+        <div class="absolute w-96 h-96 bg-white opacity-10 blur-3xl rounded-full"></div>
+    </div>
+
+    <!-- Register Form Container -->
+    <div class="w-full max-w-lg bg-white/10 shadow-lg backdrop-blur-lg border border-white/30 rounded-2xl p-6 relative z-10">
+
+        <div id="message" class="text-center font-semibold text-lg mt-4"></div>
+        <h2 class="text-3xl font-extrabold text-center text-white">Create Your Account</h2>
+
+        <form action="/register" method="POST" class="space-y-4 mt-4">
+            <div>
+                <label for="username" class="block text-lg font-semibold text-white"> <i class="fa-solid fa-user"></i> Username</label>
+                <input type="text" name="username" id="username" 
+                    class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-md text-white placeholder-white/80 focus:ring-2 focus:ring-blue-400 focus:outline-none backdrop-blur-md"
+                    placeholder="Enter your username" required>
+            </div>
+
+            <div>
+                <label for="email" class="block text-lg font-semibold text-white"><i class="fa-solid fa-envelope"></i> Email</label>
+                <input type="email" name="email" id="email" 
+                    class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-md text-white placeholder-white/80 focus:ring-2 focus:ring-blue-400 focus:outline-none backdrop-blur-md"
+                    placeholder="youremail@example.com" required>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="phone" class="block text-lg font-semibold text-white"><i class="fa-solid fa-phone"></i> Phone</label>
+                    <input type="text" name="phone" id="phone" 
+                        class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-md text-white placeholder-white/80 focus:ring-2 focus:ring-blue-400 focus:outline-none backdrop-blur-md"
+                        placeholder="Your phone number">
+                </div>
+                <div>
+                    <label for="location" class="block text-lg font-semibold text-white"><i class="fa-solid fa-location-dot"></i> Location</label>
+                    <input type="text" name="location" id="location" 
+                        class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-md text-white placeholder-white/80 focus:ring-2 focus:ring-blue-400 focus:outline-none backdrop-blur-md"
+                        placeholder="Your location">
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-lg font-semibold text-white"><i class="fa-solid fa-lock"></i> Password</label>
+                <div class="relative">
+                    <input type="password" name="password" id="password" 
+                        class="w-full px-4 py-3 pr-12 bg-white/20 border border-white/30 rounded-md text-white placeholder-white/80 focus:ring-2 focus:ring-blue-400 focus:outline-none backdrop-blur-md"
+                        placeholder="Enter your password" required>
+                    <button type="button" onclick="togglePassword()" 
+                        class="absolute inset-y-0 right-3 flex items-center text-white">
+                        <i id="eye-icon" class="fa-solid fa-eye-slash text-lg cursor-pointer"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="gender" class="block text-lg font-semibold text-white"><i class="fa-solid fa-venus-mars"></i> Gender</label>
+                    <select name="gender" id="gender" 
+                        class="w-full px-4 py-3 border border-white/30 bg-white/20 text-white placeholder-white/80 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none backdrop-blur-lg appearance-none transition duration-300 hover:bg-white/30 focus:bg-white/40">
+                        <option value="" disabled selected class="bg-gray-900/90 text-white/50">Select Gender</option>
+                        <option value="Male" class="bg-gray-900/90 text-white">Male</option>
+                        <option value="Female" class="bg-gray-900/90 text-white">Female</option>
+                        <option value="Other" class="bg-gray-900/90 text-white">Other</option>  
+                    </select>
+                </div>
+                <div>
+                    <label for="role" class="block text-lg font-semibold text-white"><i class="fa-solid fa-user-tag"></i> Role</label>
+                    <select name="role" id="role" 
+                        class="w-full px-4 py-3 border border-white/30 bg-white/20 text-white placeholder-white/80 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none backdrop-blur-lg appearance-none transition duration-300 hover:bg-white/30 focus:bg-white/40 pr-10">
+                        <option value="" disabled selected class="bg-gray-900/90 text-white/50">Select Role</option>
+                        <option value="user" class="bg-gray-900/90 text-white">User</option>
+                        <option value="admin" class="bg-gray-900/90 text-white">Admin</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" 
+            class="w-full py-3 text-lg font-semibold text-white bg-green rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:ring-4 focus:ring-green-300 focus:outline-none transition-transform duration-300 hover:scale-105 backdrop-blur-lg">
+            Register
+        </button>
+        
+
+        </form>
+
+        <p class="mt-4 text-center text-white">
+            <span>Already have an account?</span>
+            <a href="/login" class="font-bold text-white hover:text-gray-300 hover:underline">Login here</a>
+        </p>
+    </div>
+
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById('password');
+            var eyeIcon = document.getElementById('eye-icon');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const successMessage = urlParams.get('success');
+    const errorMessage = urlParams.get('err');
+    const messageDiv = document.getElementById('message');
+
+    if (successMessage) {
+        messageDiv.innerHTML = `<div class="text-green-500 bg-green-200 px-4 py-2 rounded-md">${successMessage}</div>`;
+    } else if (errorMessage) {
+        messageDiv.innerHTML = `<div class="text-red-500 bg-red-200 px-4 py-2 rounded-md">${errorMessage}</div>`;
+    }
+
+    // Hide the message after 3 seconds
+    if (successMessage || errorMessage) {
+        setTimeout(() => {
+            messageDiv.innerHTML = ""; // Clear the message
+        }, 4000);
+    }
+});
+
+    </script>
+
+</body>
+</html>

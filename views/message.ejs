@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <link rel="icon" href="/images/transparent-black-border-map-marker-with-plane-flying-over-1710972155974.webp" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+</head>
+
+<body class="flex items-center justify-center h-screen bg-gray-100" style="background-image: url(https://img.freepik.com/free-vector/dialogue-chat-clouds-speech-bubble-icon-from-lines-triangles-particle-style-design-low-poly-technology-devices-people-communication-concept-blue-background_587448-471.jpg?t=st=1742128772~exp=1742132372~hmac=afd958fea7fff9e698ad814ff2c82c80ca299fdbfdf398c0f1b019441e5213db&w=1380);background-repeat: no-repeat;background-size: cover;">
+    <nav class="fixed top-0 left-0 right-0 z-10 w-full bg-white bg-opacity-80 shadow-lg backdrop-blur-md text-black">
+        <div class="container mx-auto flex items-center justify-between px-4 py-3">
+            <!-- Logo -->
+            <a href="/" class="flex items-center space-x-3">
+                <img src="https://cdn-icons-png.flaticon.com/128/826/826070.png" alt="Travel Icon" class="w-10 h-10">
+                <span class="text-2xl font-bold text-gray-800">WanderMind</span>
+            </a> 
+        </div>
+    </nav>
+
+    <!-- Chatbot Dialog Box -->
+<div class="flex flex-col items-center space-y-4 mt-16">
+    <!-- Chatbot Dialog Box -->
+    <div class="w-96 bg-white bg-opacity-60 shadow-xl rounded-lg p-6 border border-gray-300 backdrop-blur-lg">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Chatbot</h2>
+
+        <!-- Chat Display Box -->
+        <div class="h-56 overflow-y-auto border border-gray-300 rounded-lg p-3 mb-4 bg-gray-50">
+            <% if (botResponse) { %>
+                <p class="text-gray-700"><strong>Bot:</strong> <%= botResponse %></p>
+            <% } else { %>
+                <p class="text-gray-400 italic">Bot is waiting for your message...</p>
+            <% } %>
+        </div>
+
+        <!-- Chat Input Form -->
+        <form action="/message" method="POST" class="flex gap-3">
+            <input type="text" name="message" placeholder="Type your message..." required
+                class="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700">
+            <button type="submit"
+                class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">
+                Send
+            </button>
+        </form>
+    </div>
+    <!-- Back to Home Button -->
+    <a href="/about" 
+       class="px-7 py-3 text-lg font-bold text-white bg-gradient-to-r from-blue-500 to-teal-500 
+              rounded-lg shadow-lg hover:shadow-xl hover:from-blue-600 hover:to-teal-600 
+              transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+        <i class="fas fa-arrow-left text-white text-xl"></i> Back to Home
+    </a>
+</div>
+
+</body>
+<script>
+     const menuBtn = document.getElementById('menu-btn');
+    const menu = document.getElementById('menu');
+
+    menuBtn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+    });
+    lucide.createIcons();
+</script>
+</html>

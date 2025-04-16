@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Plan</title>
+    <link rel="icon" href="/images/transparent-black-border-map-marker-with-plane-flying-over-1710972155974.webp" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+    emailjs.init('k73AEsesL6n52bP5j'); // required to avoid "Uncaught The public key is required."
+</script>
+    <style>
+        body {
+            background: url('https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-6 bg-gray-900 text-white" >
+    <nav class="fixed top-0 left-0 right-0 z-10 w-full bg-white bg-opacity-80 shadow-lg backdrop-blur-md text-black">
+        <div class="container mx-auto flex items-center justify-between px-4 py-3">
+            <!-- Logo -->
+            <a href="/" class="flex items-center space-x-3">
+                <img src="https://cdn-icons-png.flaticon.com/128/826/826070.png" alt="Travel Icon" class="w-10 h-10">
+                <span class="text-2xl font-bold text-gray-800">WanderMind</span>
+            </a>
+    
+            <!-- Hamburger Menu (Visible on Small Screens) -->
+            <button id="menu-btn" class="block md:hidden text-gray-800 focus:outline-none">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+    
+            <!-- Navigation Links (Hidden on Mobile, Shown on Larger Screens) -->
+            <div id="menu" class="hidden md:flex flex-col md:flex-row md:items-center absolute md:static top-16 left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none p-4 md:p-0">
+                <a href="/index" class="flex items-center text-gray-800 hover:text-blue-600 font-bold py-2 md:py-0 px-4 md:px-2">
+                    <i data-lucide="home" class="w-6 h-6 mr-1 text-green-500"></i> Home
+                </a>
+                <a href="/profile" class="flex items-center text-gray-800 hover:text-blue-600 font-bold py-2 md:py-0 px-4 md:px-2">
+                    <i data-lucide="user" class="w-6 h-6 mr-1 text-blue-500"></i> Profile
+                </a>
+                <a href="/edit-profile" class="flex items-center text-gray-800 hover:text-blue-600 font-bold py-2 md:py-0 px-4 md:px-2">
+                    <i data-lucide="settings" class="w-6 h-6 mr-1 text-gray-600"></i> Settings
+                </a>
+                <a href="#" onclick="confirmLogout(event)" class="flex items-center px-4 py-2 mt-2 md:mt-0 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 transition duration-300">
+                    <i class="fa-solid fa-sign-out-alt mr-2"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto bg-gray-800 opacity-90 shadow-2xl rounded-2xl p-6">
+        <h1 class="text-5xl font-extrabold text-center text-white my-8 mb-12">Trip Itinerary</h1>
+
+        <!-- Trip Overview -->
+        <div class="p-6 mb-6 border border-gray-700 rounded-lg bg-gray-900 shadow-lg">
+            <h2 class="text-4xl font-semibold text-blue-300 my-3">📌 Trip Overview</h2>
+            <p><strong>From:</strong> <%= json.tripOverview.presentLocation %></p>
+            <p><strong>Destination:</strong> <%= json.tripOverview.destination %></p>
+            <p><strong>Category:</strong> <%= json.tripOverview.category %></p>
+            <p><strong>Total Days:</strong> <%= json.tripOverview.totalDays %></p>
+            <p><strong>Budget:</strong> ₹<%= json.tripOverview.budget %></p>
+            <p><strong>Transport Mode:</strong> <%= json.tripOverview.transportMode %></p>
+        </div>
+        <!-- TRANSPORT SUGGESTIONS SECTION -->
+<div class="bg-purple-950 text-white p-5 rounded-xl shadow-lg mb-10">
+    <h2 class="text-2xl font-bold mb-4">🚗 Transport Suggestions</h2>
+  
+    <% if (json.transportSuggestions.publicOptions) { %>
+      <div class="space-y-3">
+        <% json.transportSuggestions.publicOptions.forEach(option => { %>
+          <div class="bg-purple-800 p-3 rounded-lg shadow-md">
+            <p><strong>Type:</strong> <%= option.type %></p>
+            <p><strong>Name:</strong> <%= option.name || option.airline %></p>
+          </div>
+        <% }) %>
+        <% if (json.tripOverview.transportMode.toLowerCase() === 'public') { %>
+            <div class="mt-4 text-blue-600 hover:underline cursor-pointer text-sm">
+              Want more options? <a href="https://bus.ixigo.com/" class="font-medium">Click here.</a>
+            </div>
+          <% } %>
+        <p class="mt-3 italic text-purple-300">💡 <%= json.transportSuggestions.tip %></p>
+      </div>
+  
+    <% } else if (json.transportSuggestions.drivingDistance) { %>
+      <div class="space-y-3">
+        <div class="bg-purple-800 p-3 rounded-lg shadow-md">
+          <p><strong>Distance:</strong> <%= json.transportSuggestions.drivingDistance.distanceInKm %> km</p>
+          <p><strong>Estimated Time:</strong> <%= json.transportSuggestions.drivingDistance.estimatedTimeInHours %> hrs</p>
+          <p><strong>Fuel Cost:</strong> ₹<%= json.transportSuggestions.drivingDistance.estimatedFuelCost %></p>
+        </div>
+  
+        <h3 class="text-lg font-semibold mt-4">🛑 Recommended Stopovers:</h3>
+        <% json.transportSuggestions.stopovers.forEach(stop => { %>
+          <div class="bg-purple-800 p-3 rounded-lg shadow-md">
+            <p><strong><%= stop.name %></strong></p>
+            <p><%= stop.whyToStop %></p>
+          </div>
+        <% }) %>
+        <p class="mt-3 italic text-purple-300">💡 <%= json.transportSuggestions.tip %></p>
+      </div>
+    <% } %>
+  </div>
+  
+        <!-- Daily Itinerary -->
+        <% json.itinerary.forEach(day => { %>
+            <div class="p-6 mb-6 border border-gray-700 rounded-lg bg-gray-800 shadow-lg">
+                <h2 class="text-4xl font-semibold text-yellow-300 my-3">🗓️ Day <%= day.day %></h2>
+
+                <!-- Places to Visit -->
+                <% day.placesToVisit.forEach(place => { %>
+                    <div class="mt-4 p-4 border border-gray-700 rounded-lg bg-gray-900 shadow-lg">
+                        <h3 class="text-3xl font-semibold text-blue-400"><%= place.name %></h3>
+                        <p class="text-gray-400"><%= place.longDescription %></p>
+                        <p>📍 <strong><%= place.distanceFromTourLocation %> km away from <%= json.tripOverview.destination %></strong> </p>
+                        <iframe 
+                        src="http://localhost:3001/images?q=<%= place.name %>" 
+                        width="100%" 
+                        height="250px" 
+                        class="my-3 rounded-lg shadow-md"
+                        style="border: none;">
+                    </iframe>
+                    <iframe 
+                        src="http://localhost:3001/map?lat=<%= place.lat %>&lng=<%= place.lng %>&location=<%= encodeURIComponent(place.name) %>" 
+                        width="100%" 
+                        height="300px" 
+                        class="my-3 rounded-lg shadow-md"
+                        style="border: none;">
+                    </iframe>
+                    </div>
+                <% }); %>
+
+                <!-- Food and Accommodation -->
+                <div class="mt-6 p-4 border border-gray-700 rounded-lg bg-gray-900 shadow-lg">
+                    <h3 class="text-3xl font-semibold text-red-400">🏨 Food & Accommodation</h3>
+
+                    <h4 class="text-2xl text-gray-300">🍽️ Restaurants</h4>
+                    <% day.foodAndAccommodation.restaurants.forEach(restaurant => { %>
+                        <p>• <strong><%= restaurant.name %></strong> - Avg. Meal Cost: ₹<%= restaurant.averageMealCost %></p>
+                    <% }); %>
+
+                    <h4 class="text-2xl text-gray-300 mt-4">🏨 Hotels</h4>
+                    <% day.foodAndAccommodation.hotels.forEach(hotel => { %>
+                        <p>• <strong><%= hotel.name %></strong> - Avg. Room Price: ₹<%= hotel.averageRoomPrice %></p>
+                    <% }); %>
+                </div>
+
+                <!-- Activities -->
+                <div class="mt-6 p-4 border border-gray-700 rounded-lg bg-gray-900 shadow-lg">
+                    <h3 class="text-3xl font-semibold text-green-400">🎭 Activities</h3>
+                    <% day.activities.forEach(activity => { %>
+                        <p>• <strong><%= activity.name %></strong> - Cost: ₹<%= activity.cost %></p>
+                    <% }); %>
+                </div>
+
+                <!-- Local Transport -->
+                <div class="mt-6 p-4 border border-gray-700 rounded-lg bg-gray-900 shadow-lg">
+                    <h3 class="text-3xl font-semibold text-purple-400">🚖 Local Transport</h3>
+                    <p>🚎 <strong>Available Transport:</strong> <%= day.transportationDetails.localTransportOptions.join(", ") %></p>
+                </div>
+
+                <!-- Budget Breakdown -->
+                <div class="mt-6 p-4 border border-gray-700 rounded-lg bg-gray-900 shadow-lg">
+                    <h3 class="text-3xl font-semibold text-yellow-400">💰 Daily Budget Breakdown</h3>
+                    <p>🚗 Transport: ₹<%= day.dailyBudgetBreakdown.transport %></p>
+                    <p>🏠 Accommodation: ₹<%= day.dailyBudgetBreakdown.accommodation %></p>
+                    <p>🍔 Food: ₹<%= day.dailyBudgetBreakdown.food %></p>
+                    <p>🎟️ Entry Fees: ₹<%= day.dailyBudgetBreakdown.entryFees %></p>
+                    <p>🔹 Miscellaneous: ₹<%= day.dailyBudgetBreakdown.miscellaneous %></p>
+                </div>
+
+                <!-- Travel Tips -->
+                <div class="mt-6 p-4 border border-gray-700 rounded-lg bg-gray-900 shadow-lg">
+                    <h3 class="text-3xl font-semibold text-orange-400">💡 Travel Tips</h3>
+                    <p>🌦️ <strong>Weather:</strong> <%= day.travelTips.weather %></p>
+                    <p>⏰ <strong>Best Visiting Hours:</strong> <%= day.travelTips.bestVisitingHours %></p>
+                    <p>🛡️ <strong>Safety Tips:</strong></p>
+                    <ul>
+                        <% day.travelTips.safetyTips.forEach(tip => { %>
+                            <li>• <%= tip %></li>
+                        <% }); %>
+                    </ul>
+                </div>
+            </div>
+        <% }); %>
+
+        <!-- Overall Budget Breakdown -->
+        <div class="p-6 mb-6 border border-gray-700 rounded-lg bg-gray-900 shadow-lg">
+            <h2 class="text-4xl font-semibold text-pink-400 my-3">💵 Overall Budget Breakdown</h2>
+            <p>🚗 Transport: ₹<%= json.overallBudgetBreakdown.transport %></p>
+            <p>🏠 Accommodation: ₹<%= json.overallBudgetBreakdown.accommodation %></p>
+            <p>🍔 Food: ₹<%= json.overallBudgetBreakdown.food %></p>
+            <p>🎟️ Entry Fees: ₹<%= json.overallBudgetBreakdown.entryFees %></p>
+            <p>🔹 Buffer Amount: ₹<%= json.overallBudgetBreakdown.buffer %></p>
+        </div>
+        <div class="mt-6 flex justify-center">
+            <a href="/report" 
+               class="inline-block px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-lg rounded-full shadow-lg transition duration-200">
+              🔄 Get Live Updates
+            </a><br>
+          </div>
+        <div class="p-8 mb-6 border border-gray-700 rounded-xl bg-gray-900 shadow-xl text-center max-w-md mx-auto">
+            <h2 class="text-3xl font-bold text-green-400 mb-4">📩 Send Itinerary via Email</h2>
+            
+            <p class="text-gray-400 text-sm mb-4">
+                Enter your email to receive a detailed itinerary. Make sure to check your inbox! 📬
+            </p>
+            
+            <div class="relative w-full">
+                <input 
+                    type="email" 
+                    id="userEmail" 
+                    placeholder="Enter your email address" 
+                    class="w-full px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-green-400 focus:outline-none shadow-md transition duration-300"
+                />
+                <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">✉️</span>
+            </div>
+        
+            <button 
+                onclick="sendEmail()" 
+                class="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:from-green-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            >
+                🚀 Send Itinerary
+            </button>
+        </div>
+        
+        <center> <h2>Enjoy your trip and travel safely! ✈️</h2>
+            <p>May your journey be filled with adventure, laughter, and beautiful memories! 🌍😊</p>
+            <p>Don’t forget to capture special moments and try the local cuisine! 🍽️📸</p>
+            <p>Wishing you a smooth and wonderful trip ahead! 🚀✨</p></center>
+    </div>
+</body>
+<script>
+    lucide.createIcons();
+    function confirmLogout(event) {
+            event.preventDefault();
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "/about";
+            }
+        }
+
+        gsap.from("#greeting", { duration: 1.5, opacity: 0, y: -20, ease: "power2.out" });
+        const menuBtn = document.getElementById('menu-btn');
+    const menu = document.getElementById('menu');
+
+    menuBtn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+    });
+    (function() {
+        emailjs.init("k73AEsesL6n52bP5j"); // Replace with your EmailJS Public Key
+    })();
+
+    function sendEmail() {
+    const userEmail = document.getElementById("userEmail").value;
+    if (!userEmail) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    const templateParams = {
+        to_email: userEmail,
+        trip_from: "<%= json.tripOverview.presentLocation %>",
+        trip_destination: "<%= json.tripOverview.destination %>",
+        trip_days: "<%= json.tripOverview.totalDays %>",
+        category:"<%= json.tripOverview.category %>",
+        trip_budget: "<%= json.tripOverview.budget %>",
+        trip_transport: "<%= json.tripOverview.transportMode %>",
+        itinerary_details: `<%= json.itinerary.map((day, index) => 
+            '🗓️ Day ' + (index + 1) + ':\n' +
+            '📍 Places to Visit: \n' + day.placesToVisit.map(p => '• ' + p.name).join('\n') + '\n' +
+            '🍽️ Restaurants: ' + (day.foodAndAccommodation.restaurants.length ? day.foodAndAccommodation.restaurants.map(r => r.name).join(', ') : 'Not listed') + '\n' +
+            '🏨 Hotels: ' + (day.foodAndAccommodation.hotels.length ? day.foodAndAccommodation.hotels.map(h => h.name).join(', ') : 'Not listed') + '\n' +
+            '💡 Travel Tips: ' + (day.travelTips.safetyTips.length ? day.travelTips.safetyTips.join('\n') : 'No tips available') + '\n\n'
+        ).join('') %>`,
+        budget_breakdown: `
+            🚗 Transport: <%= json.overallBudgetBreakdown.transport %>\n
+            🏨 Accommodation: <%= json.overallBudgetBreakdown.accommodation %>\n
+            🍽️ Food: <%= json.overallBudgetBreakdown.food %>\n
+            🎟️ Entry Fees: <%= json.overallBudgetBreakdown.entryFees %>\n
+            🛠️ Miscellaneous: <%= json.overallBudgetBreakdown.buffer %>"\n
+        `
+    };
+
+    emailjs.send("service_vec7ewc", "template_uhk712i", templateParams)
+        .then(response => {
+            alert("Itinerary sent successfully!");
+        })
+        .catch(error => {
+            console.error("Email send error:", error);
+            alert("Failed to send itinerary. Please try again.");
+        });
+}
+
+</script>
+</html>

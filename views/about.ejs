@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderMind App</title>
+    <link rel="icon" href="/images/transparent-black-border-map-marker-with-plane-flying-over-1710972155974.webp" type="image/x-icon">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://kit.fontawesome.com/db76a2fd42.js" crossorigin="anonymous"></script>
+    
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
+        .animate-fade-in {
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+    
+        @keyframes parallaxMove {
+            from { transform: translateY(-10px); }
+            to { transform: translateY(10px); }
+        }
+        .animate-parallax {
+            animation: parallaxMove 5s ease-in-out infinite alternate;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen py-0 font-sans" style="background: url(https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg) no-repeat center center/cover;background-attachment: fixed;">
+    
+
+
+    <!-- Hero Section -->
+    <section class="w-full min-h-screen flex flex-col items-center justify-center px-8 py-24 text-center text-white relative overflow-hidden">
+    
+        <!-- Background Overlay for Better Readability -->
+        <div class="absolute inset-0 bg-black/30"></div>
+        <br><br><br><br>
+        <div class="relative z-10 animate-fade-in">
+            <h1 class="mb-6 text-5xl font-extrabold text-white drop-shadow-lg">
+                Welcome to <span class="text-yellow-300 font-extrabold">WanderMind</span>
+            </h1>               
+          
+            <h2 class="max-w-4xl mx-auto text-2xl sm:text-3xl text-white drop-shadow-md leading-relaxed">
+                <span id="typing-text" class="text-white-300 font-bold"></span>
+            </h2>
+        
+            <!-- Statistics with Icons -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 text-xl font-bold">
+                <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl px-8 py-6 text-center shadow-lg">
+                    <span class="text-yellow-300 text-3xl">📜 20,000+</span>  
+                    <br>
+                    <span class="text-white text-md font-semibold">Itineraries Generated</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl px-8 py-6 text-center shadow-lg">
+                    <span class="text-yellow-300 text-3xl">✈️ 10,000+</span>  
+                    <br>
+                    <span class="text-white text-md font-semibold">Happy Travelers</span>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl px-8 py-6 text-center shadow-lg">
+                    <span class="text-yellow-300 text-3xl">🏝️ 100+</span>  
+                    <br>
+                    <span class="text-white text-md font-semibold">Destinations Covered</span>
+                </div>
+            </div>
+            
+            
+            <br><br><br>
+
+            <div class="flex justify-center items-center">
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8">
+                    <a href="/login" 
+                        class="relative px-10 sm:px-16 py-3 sm:py-5 text-md sm:text-lg font-extrabold text-gray-900 border-4 border-yellow-500 rounded-xl transition-all duration-300 
+                        hover:bg-yellow-500 hover:text-white hover:shadow-2xl active:scale-95 text-center w-full sm:w-auto">
+                        Login
+                    </a>
+            
+                    <a href="/register" 
+                        class="relative px-10 sm:px-16 py-3 sm:py-5 text-md sm:text-lg font-extrabold text-gray-900 border-4 border-green-500 rounded-xl transition-all duration-300 
+                        hover:bg-green-500 hover:text-white hover:shadow-2xl active:scale-95 text-center w-full sm:w-auto">
+                        Register
+                    </a>
+                </div>
+            </div>
+            
+            <br>
+            <!-- Scroll Indicator -->
+            <div class="mt-10 animate-bounce">
+                <span class="text-4xl font-extrabold"><i class="fa-solid fa-arrow-down"></i></span>
+            </div>
+        </div>
+    </section>
+    
+
+
+    <!-- Our Vision (Removed Margin) -->
+    <section class="container p-12 mx-auto rounded-xl  ">
+        <h2 class="mb-8 text-4xl font-extrabold text-gray-800 text-center tracking-wide drop-shadow-lg">
+            🌟 Our Vision
+        </h2>
+        <div class="grid gap-8 md:grid-cols-3">
+            <div class="p-6 bg-white/80 backdrop-blur-lg rounded-xl shadow-lg text-center hover:scale-105 hover:shadow-2xl transition-transform duration-300">
+                <h3 class="text-2xl font-semibold text-gray-800">🌍 AI-Powered Personalization</h3>
+                <img src="https://miro.medium.com/v2/resize:fit:1200/1*EDQ5PX7mjL_8epaCPU6tlA.jpeg" class="rounded-lg mt-3 shadow-md" alt="">
+                <p class="text-gray-700 mt-4 leading-relaxed text-left">Tailored travel experiences based on your interests and preferences.</p>
+            </div>
+            <div class="p-6 bg-white/80 backdrop-blur-lg rounded-xl shadow-lg text-center hover:scale-105 hover:shadow-2xl transition-transform duration-300">
+                <h3 class="text-2xl font-semibold text-gray-800">✈️ Hassle-Free Trip Planning</h3>
+                <img src="https://indianexpress.com/wp-content/uploads/2018/05/travel-plans_759_getty.jpg" class="rounded-lg mt-3 shadow-md" alt="">
+                <p class="text-gray-700 mt-4 leading-relaxed text-left">Seamlessly plan and manage your entire journey in one place.</p>
+            </div>
+            <div class="p-6 bg-white/80 backdrop-blur-lg rounded-xl shadow-lg text-center hover:scale-105 hover:shadow-2xl transition-transform duration-300">
+                <h3 class="text-2xl font-semibold text-gray-800">📡 Real-Time Travel Insights</h3>
+                <img src="https://cdn-ebdac.nitrocdn.com/gueMmbfUhWDDytLHhlTdyRhwXEYxJYQN/assets/images/optimized/rev-85837e5/www.bluemagnet.co.za/wp-content/uploads/2023/11/Untitled-design.png" class="rounded-lg mt-3 shadow-md" alt="">
+                <p class="text-gray-700 mt-4 leading-relaxed text-left">Stay updated with the latest travel trends, alerts, and recommendations.</p>
+            </div>
+            
+        </div>
+    </section>
+    
+    <!-- Travel Tips (Removed Margin) -->
+   <section class="container mx-auto px-6 py-12 rounded-xl">
+    <h2 class="mb-6 text-4xl font-extrabold text-center text-gray-800 tracking-wide drop-shadow-lg">
+        🌍 Travel Tips
+    </h2>
+    <p class="max-w-2xl mx-auto text-lg font-semibold text-center text-gray-700 mb-8">
+        Make your trips smoother and more enjoyable with these essential travel tips.
+    </p>
+
+    <div class="space-y-6 max-w-3xl mx-auto">
+        <!-- FAQ Item 1 -->
+        <div class="faq-item bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200">
+            <button class="w-full text-left flex items-center justify-between text-lg font-bold text-gray-800 toggle-btn">
+                <span class="flex items-center gap-2">
+                    🎒 Pack Smart & Light
+                </span>
+                <span class="toggle-icon transition-transform duration-300 text-gray-600 text-xl">➕</span>
+            </button>
+            <p class="faq-content hidden mt-4 text-lg font-medium text-gray-900 bg-yellow-200 px-6 py-3 rounded-lg shadow-md border border-gray-200">
+                Pack only the essentials for maximum convenience and comfort. Avoid overpacking to stay organized and move freely.  
+                A well-packed bag ensures a stress-free and enjoyable journey! ✈️✨
+            </p>
+        </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="faq-item bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200">
+            <button class="w-full text-left flex items-center justify-between text-lg font-bold text-gray-800 toggle-btn">
+                <span class="flex items-center gap-2">
+                    📶 Stay Connected
+                </span>
+                <span class="toggle-icon transition-transform duration-300 text-gray-600 text-xl">➕</span>
+            </button>
+            <p class="faq-content hidden mt-4 text-lg font-medium text-gray-900 bg-orange-200 px-6 py-3 rounded-lg shadow-md border border-gray-200">
+                Use travel-friendly SIM cards or portable Wi-Fi hotspots for seamless internet access.  
+                Avoid expensive roaming fees and enhance your navigation, communication, and overall travel experience. 🌍
+            </p>
+        </div>
+
+        <!-- FAQ Item 3 -->
+        <div class="faq-item bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200">
+            <button class="w-full text-left flex items-center justify-between text-lg font-bold text-gray-800 toggle-btn">
+                <span class="flex items-center gap-2">
+                    🌍 Explore Local Culture
+                </span>
+                <span class="toggle-icon transition-transform duration-300 text-gray-600 text-xl">➕</span>
+            </button>
+            <p class="faq-content hidden mt-4 text-lg font-medium text-gray-900 bg-teal-200 px-6 py-3 rounded-lg shadow-md border border-gray-200">
+                Immerse yourself in the local culture! Engage with residents, try traditional cuisines, and learn key phrases.  
+                Create unforgettable memories and meaningful connections on your journey. ✨
+            </p>
+        </div>
+    </div>
+</section>
+
+
+
+    <section class="container mx-auto px-6 py-12">
+        <h2 class="mb-6 text-4xl font-extrabold text-center text-gray-800 drop-shadow-lg">
+            🌍 Popular Destinations
+        </h2>
+    
+        <!-- Swiper Container -->
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <!-- Slide 1 -->
+                <div class="swiper-slide p-6 bg-white rounded-xl shadow-lg text-center">
+                    <img src="https://www.theinvisibletourist.com/wp-content/uploads/2022/02/featured_215.jpg" class="rounded-lg shadow-md w-full h-64 object-cover" alt="Paris">
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-4">Paris, France</h3>
+                    <p class="text-gray-700 mt-2">The city of love, known for its rich history, art, and the iconic Eiffel Tower.</p>
+                </div>
+    
+               
+                <div class="swiper-slide p-6 bg-white rounded-xl shadow-lg text-center">
+                    <img src="https://assets.cntraveller.in/photos/63f5b2d472cc3e2749d663f5/16:9/w_6016,h_3384,c_limit/GettyImages-1145042281.jpeg" class="rounded-lg shadow-md w-full h-64 object-cover" alt="Bali">
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-4">Bali, Indonesia</h3>
+                    <p class="text-gray-700 mt-2">A tropical paradise with stunning beaches, temples, and lush greenery.</p>
+                </div>
+
+                <div class="swiper-slide p-6 bg-white rounded-xl shadow-lg text-center">
+                    <img src="https://cdn.britannica.com/61/93061-050-99147DCE/Statue-of-Liberty-Island-New-York-Bay.jpg" class="rounded-lg shadow-md w-full h-64 object-cover" alt="New York">
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-4">New York, USA</h3>
+                    <p class="text-gray-700 mt-2">The city that never sleeps, featuring Times Square, Broadway, and the Statue of Liberty.</p>
+                </div>
+                <div class="swiper-slide p-6 bg-white rounded-xl shadow-lg text-center">
+                    <img src="https://www.livemint.com/lm-img/img/2024/12/30/1600x900/where_to_eat_in_goa_after_partying_1735548808689_1735548815198.jpg" class="rounded-lg shadow-md w-full h-64 object-cover" alt="New York">
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-4">Goa, India</h3>
+                    <p class="text-gray-700 mt-2">A tropical paradise known for its golden beaches, vibrant nightlife, historic forts, and Portuguese heritage.</p>
+                </div>
+                <div class="swiper-slide p-6 bg-white rounded-xl shadow-lg text-center">
+                    <img src="https://media.cnn.com/api/v1/images/stellar/prod/230516121517-01-body-crossroads-maldives-aerial.jpg?c=original" class="rounded-lg shadow-md w-full h-64 object-cover" alt="New York">
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-4">Maldives</h3>
+                    <p class="text-gray-700 mt-2">A dreamlike getaway with overwater bungalows, coral reefs, and serene beaches.</p>
+                </div>
+                <div class="swiper-slide p-6 bg-white rounded-xl shadow-lg text-center">
+                    <img src="https://i.natgeofe.com/n/bd48279e-be5a-4f28-9551-5cb917c6766e/GettyImages-103455489cropped_2x1.jpg" class="rounded-lg shadow-md w-full h-64 object-cover" alt="New York">
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-4">Sydney, Australia</h3>
+                    <p class="text-gray-700 mt-2">Home to the iconic Sydney Opera House, Harbour Bridge, and beautiful.</p>
+                </div>
+            </div>
+    
+            <!-- Navigation Arrows -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+    
+            <!-- Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+    
+
+
+    <section class="container mx-auto px-6 py-12 text-center">
+        <h2 class="text-4xl font-extrabold text-gray-800 drop-shadow-lg mb-6">🌍 Travel Inspiration</h2>
+        <p id="quote" class="text-2xl italic font-semibold text-gray-700">"The world is a book, and those who do not travel read only one page."</p>
+    </section> 
+
+
+
+    <section class="container mx-auto px-6 py-12 text-center rounded-lg shadow-xl">
+    <h2 class="text-4xl font-extrabold text-gray-800 drop-shadow-lg mb-8">💬 What Our Users Say</h2>
+
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+        <!-- Testimonial 1 -->
+        <div class="p-6 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+            <p class="text-lg text-gray-700 italic">🌟 "WanderMind helped me plan my dream vacation with ease!"</p>
+            <h4 class="mt-4 font-bold text-gray-900">- Emily Watson</h4>
+        </div>
+        <!-- Testimonial 2 -->
+        <div class="p-6 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+            <p class="text-lg text-gray-700 italic">🌟 "AI-based trip planning saved me hours! Highly recommended!"</p>
+            <h4 class="mt-4 font-bold text-gray-900">- Rahul Sharma</h4>
+        </div>
+        <!-- Testimonial 3 -->
+        <div class="p-6 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+            <p class="text-lg text-gray-700 italic">🌟 "Customized itineraries made my trip unforgettable. Loved it!"</p>
+            <h4 class="mt-4 font-bold text-gray-900">- Sophia Lee</h4>
+        </div>
+        <!-- Testimonial 4 -->
+        <div class="p-6 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+            <p class="text-lg text-gray-700 italic">🌟 "A must-have for travelers! Hassle-free planning with amazing suggestions."</p>
+            <h4 class="mt-4 font-bold text-gray-900">- Daniel Martinez</h4>
+        </div>
+    </div>
+</section>
+
+<a href="/message" class="fixed bottom-5 right-5 bg-blue-500 text-white py-2 px-4 rounded-full text-center text-lg shadow-lg hover:bg-blue-700 transition duration-300">🤖Need Help?</a>
+
+<button id="backToTop" class="fixed bottom-5 left-5 bg-purple-600 text-white px-5 py-3 rounded-full 
+    shadow-lg flex items-center gap-2 text-lg font-medium 
+    transition-all duration-300 transform hover:scale-105 hover:bg-purple-700 hidden">
+    ⬆️ <span>Back to Top</span>
+</button>
+
+
+
+     
+    
+    
+    <footer class="w-full bg-gray-900 text-white py-10">
+        <div class="container mx-auto px-8 md:flex md:justify-between items-center">
+            
+            <div class="mb-6 md:mb-0">
+                <h2 class="text-3xl font-extrabold tracking-wide text-white">WanderMind</h2>
+                <p class="mt-3 text-lg text-gray-400">Your AI-powered smart travel companion.</p>
+            </div>
+    
+        
+            <div class="mb-6 md:mb-0">
+                <h3 class="text-xl font-bold text-white">📩 Contact Us</h3>
+                <p class="mt-3 text-lg text-gray-300">✉️ <span class="font-semibold">info@wandermind.com</span></p>
+                <p class="text-lg text-gray-300">📍 <span class="font-semibold">New York, USA</span></p>
+            </div>
+    
+            <div>
+                <h3 class="text-xl font-bold text-white">📢 Follow Us</h3>
+                <div class="flex mt-3 space-x-4">
+                    <a href="#" class="text-blue-400">
+                        <i class="fa-brands fa-facebook text-3xl"></i>
+                    </a>
+                    <a href="#" class="text-sky-400">
+                        <i class="fa-brands fa-twitter text-3xl"></i>
+                    </a>
+                    <a href="#" class="text-pink-500">
+                        <i class="fa-brands fa-instagram text-3xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <hr class="my-8 border-gray-700">
+        <div class="text-center text-lg text-gray-400 font-medium">
+            © 2025 <span class="font-semibold text-white">WanderMind</span>. All rights reserved.
+        </div>
+    </footer>
+    
+    
+    <script>
+            var swiper = new Swiper(".mySwiper", {
+            loop: true,
+            spaceBetween: 20,
+            slidesPerView: 1, 
+            autoplay: {
+            delay: 2500, // Auto-slide every 3 seconds
+            disableOnInteraction: false, // Keeps autoplay even if user interacts
+            },
+            navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+            },
+            pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+            },
+            breakpoints: {
+            768: { slidesPerView: 2 },  /* 2 slides for tablets */
+            1024: { slidesPerView: 3 }, /* 3 slides for desktops */
+            }
+        });
+                const quotes = [
+                `"To travel is to live." - Hans Christian Andersen`,
+                `"Not all those who wander are lost." - J.R.R. Tolkien`,
+                `"Take only memories, leave only footprints." - Chief Seattle`,
+                `"Adventure is worthwhile." - Aesop`
+            ];
+                    setInterval(() => {
+                        document.getElementById('quote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+                    }, 3000);
+                        document.addEventListener("DOMContentLoaded", function () {
+                            // Ensure Lucide icons are properly loaded
+                            if (window.lucide) {
+                        setTimeout(() => lucide.createIcons(), 100);
+                    }
+            
+                    // Smooth animations using GSAP
+                    gsap.from("h2, p", { opacity: 0, y: 30, duration: 1, stagger: 0.3 });
+            
+                    // FAQ toggle animation
+                    document.querySelectorAll('.toggle-btn').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const content = button.nextElementSibling;
+                            const icon = button.querySelector('.toggle-icon');
+            
+                            if (content.classList.contains('hidden')) {
+                                content.classList.remove('hidden');
+                                gsap.fromTo(content, { height: 0, opacity: 0 }, { height: "auto", opacity: 1, duration: 0.5 });
+                                icon.textContent = '➖';
+                            } else {
+                                gsap.to(content, { height: 0, opacity: 0, duration: 0.5, onComplete: () => content.classList.add('hidden') });
+                                icon.textContent = '➕';
+                            }
+                        });
+                    });
+                });
+                const backToTopButton = document.getElementById("backToTop");
+
+        // Show or hide the button when scrolling
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.remove("hidden");
+            } else {
+                backToTopButton.classList.add("hidden");
+            }
+        });
+
+        // Scroll to top smoothly when clicked
+        backToTopButton.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+                const text = "Your AI-powered smart travel companion...";
+                let i = 0;
+                function typeEffect() {
+                    if (i < text.length) {
+                        document.getElementById("typing-text").textContent += text.charAt(i);
+                        i++;
+                        setTimeout(typeEffect, 100);
+                    }
+                }
+                typeEffect();
+            });
+
+    </script>
+    
+</body>
+</html>

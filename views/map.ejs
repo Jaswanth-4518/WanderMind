@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderMind App</title>
+    <link rel="icon" href="/images/transparent-black-border-map-marker-with-plane-flying-over-1710972155974.webp" type="image/x-icon">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="bg-white px-5">
+
+    
+   
+    <h1 class="font-medium text-3xl my-4">Map Location</h1>
+    <div id="map" class="max-w-5xl w-full h-96 my-3">
+        
+    </div> 
+    <div class="p-4">  </div>
+    <script>
+        function initMap() {
+          // Get parameters from URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const lat = parseFloat(urlParams.get("lat")) || 17.6868; // Default: Visakhapatnam
+          const lng = parseFloat(urlParams.get("lng")) || 83.2185; // Default: Visakhapatnam
+          const locationName = urlParams.get("location"); // Optional location name
+      
+          // Initialize Google Map
+          const map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat, lng },
+            zoom: 14, // Adjust zoom level as needed
+          });
+      
+          // Add marker if location name is provided
+          if (locationName) {
+            new google.maps.Marker({
+              position: { lat, lng },
+              map,
+              title: locationName,
+            });
+          }
+        }
+        window.initMap = initMap;
+
+      </script>
+</body>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABE82brmPt15AR5Zke7N4ug4Ub3LZhn8c&callback=initMap"
+  async
+  defer
+></script>
+</html>
